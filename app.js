@@ -1,3 +1,4 @@
+import { t, toggleLanguage } from './i18n.js';
 import { uuid, formatAmount, formatDateISO, toast } from './utils.js';
 import { getExpenses, addExpense, updateExpense, deleteExpense, clearAll, getSettings, setSettings } from './storage.js';
 import { buildTips } from './tips.js';
@@ -67,7 +68,7 @@ function renderList(){
         <button class="btn small edit">✏️</button>
         <button class="btn small del">🗑️</button>
       </td>`;
-    tr.querySelector('.del').onclick=()=>{ deleteExpense(e.id); renderAll(); toast(t('toast_deleted')); track && track('expense_delete'); };
+    tr.querySelector('.del').onclick=()=>{ deleteExpense(e.id); renderAll(); toast(t('toast_deleted')); window.track && window.track('expense_delete'); };
     tr.querySelector('.edit').onclick=()=>{
       openModal();
       document.getElementById('id').value=e.id;
@@ -108,13 +109,13 @@ function renderSettings(){
 }
 
 function saveSettings(){
-  const s = setSettings({
+  setSettings({
     monthlyBudget: document.getElementById('monthlyBudget').value,
     currencySymbol: document.getElementById('currencySymbol').value || (window.CONFIG?.CURRENCY_SYMBOL || 'ج.م'),
     numberLocale: document.getElementById('numberLocale').value || (window.CONFIG?.NUMBER_LOCALE || 'ar-EG')
   });
   toast(t('toast_settings_saved'));
-  track && track('settings_update');
+  window.track && window.track('settings_update');
   renderAll();
 }
 
@@ -127,7 +128,8 @@ function showTab(tab){
 function openModal(){ document.getElementById('addModal').style.display='block'; }
 function closeModal(){ document.getElementById('addModal').style.display='none'; }
 
-function renderAll(){ recalcSummary(); renderList(); refreshCategorySuggestions(); renderTips();
+function renderAll(){
+  recalcSummary(); renderList(); refreshCategorySuggestions(); renderTips();
   if (typeof window.renderCharts === 'function') window.renderCharts();
 }
 window.rerenderAll = renderAll;
@@ -149,7 +151,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
       note: document.getElementById('note').value.trim()
     };
     if ($id.value) { updateExpense(item.id, item); toast(t('toast_updated')); }
-    else { addExpense(item); toast(t('toast_added')); track && track('expense_add', {amount:item.amount}); }
+    else { addExpense(item); toast(t('toast_added')); window.track && window.track('expense_add', {amount:item.amount}); }
     $form.reset(); $id.value=''; $date.value=formatDateISO(new Date());
     renderAll(); closeModal();
   });
@@ -163,9 +165,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   });
   document.getElementById('saveSettings').addEventListener('click', saveSettings);
 
-  document.getElementById('langToggle').addEventListener('click', ()=> {
-    if (typeof toggleLanguage==='function') toggleLanguage();
-  });
+  document.getElementById('langToggle').addEventListener('click', ()=> toggleLanguage());
 
   document.querySelectorAll('.tabbar .tab').forEach(btn=>
     btn.addEventListener('click', ()=> showTab(btn.getAttribute('data-tab')) )
@@ -175,9 +175,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
   document.querySelector('#addModal .close').onclick=closeModal;
 
   renderSettings(); renderAll();
-  track && track('app_open');
+  window.track && window.track('app_open');
 });
 
+// SW backup
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
 }

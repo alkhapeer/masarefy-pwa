@@ -10,26 +10,31 @@
   <meta name="theme-color" content="#0ea5e9" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <!-- أيقونة التطبيق -->
   <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
   <link rel="icon" type="image/png" href="./assets/icons/icon-192.png" />
 
   <link rel="stylesheet" href="./styles.css" />
 
-  <!-- ترتيب التحميل -->
-  <script src="./vendor/chart.min.js" defer></script>
+  <!-- Config & i18n -->
+  <script src="./config.js"></script>
   <script src="./i18n.js" defer></script>
 
-  <!-- ES modules -->
+  <!-- Charts: loader يجلب Chart.js الحقيقي من CDN -->
+  <script src="./vendor/chart-loader.js" defer></script>
+
+  <!-- App modules -->
   <script type="module" src="./utils.js"></script>
   <script type="module" src="./storage.js"></script>
   <script type="module" src="./tips.js"></script>
   <script src="./charts.js" defer></script>
   <script type="module" src="./app.js"></script>
   <script src="./install.js" defer></script>
+
+  <!-- Analytics & Ads (تقرأ من config.js) -->
+  <script src="./analytics.js" defer></script>
+  <script src="./ads.js" defer></script>
 </head>
 <body>
-  <!-- شريط علوي -->
   <header class="topbar">
     <div class="brand">
       <img src="./assets/icons/icon-192.png" alt="" />
@@ -43,11 +48,14 @@
     </div>
   </header>
 
-  <!-- بنر إعلاني علوي (إذا كنت مفعِّل إعلاناتك) -->
+  <!-- HERO Ad (مميز) -->
+  <div id="ad-hero" class="ad-hero" aria-label="Hero Ad"></div>
+
+  <!-- Top banner -->
   <div id="ad-top" class="ad-box" aria-label="Top banner"></div>
 
   <main class="container" id="mainApp">
-    <!-- لوحات: اليوم / الشهر -->
+    <!-- Summary: Today / Month -->
     <section class="grid summary" data-section="home">
       <div class="card">
         <div class="kpi">
@@ -87,13 +95,13 @@
       </div>
     </section>
 
-    <!-- نصائح ذكية -->
+    <!-- Tips -->
     <section class="card" style="margin-top:12px">
       <h3 data-i18n="tips">نصائح ذكية</h3>
       <ul id="tipsList"></ul>
     </section>
 
-    <!-- إعدادات وتصفية -->
+    <!-- Settings & Filters -->
     <section class="controls" data-section="settings" style="margin-top:12px">
       <div class="card">
         <h3 data-i18n="set_budget">إعدادات</h3>
@@ -121,7 +129,7 @@
       </div>
     </section>
 
-    <!-- نافذة إضافة/تعديل -->
+    <!-- Modal -->
     <div id="addModal" class="modal" aria-hidden="true">
       <div class="modal-content">
         <span class="close" aria-label="Close">×</span>
@@ -141,7 +149,7 @@
       </div>
     </div>
 
-    <!-- القائمة -->
+    <!-- List -->
     <section class="list card" data-section="home" style="margin-top:12px">
       <h3 data-i18n="expenses">المصاريف</h3>
       <div class="table">
@@ -163,7 +171,7 @@
       </div>
     </section>
 
-    <!-- الرسوم -->
+    <!-- Charts -->
     <section class="charts card" data-section="charts" style="margin-top:12px">
       <h3 data-i18n="charts">الرسوم البيانية</h3>
       <div class="row">
@@ -173,46 +181,20 @@
     </section>
   </main>
 
-  <!-- بنر سفلي -->
-  <div id="ad-bottom" class="ad-box" aria-label="Bottom banner"></div>
+  <!-- Sticky bottom banner -->
+  <div id="ad-bottom" class="ad-sticky" aria-label="Bottom banner"></div>
 
-  <!-- تبويبات -->
+  <!-- Tabs -->
   <nav class="tabbar">
     <button class="tab active" data-tab="home" aria-label="Home">🏠</button>
     <button class="tab" data-tab="charts" aria-label="Charts">📊</button>
     <button class="tab" data-tab="settings" aria-label="Settings">⚙️</button>
   </nav>
 
-  <!-- نافذة التعليمات -->
-  <div id="installHowModal" class="modal" aria-hidden="true">
-    <div class="modal-content">
-      <span class="close" aria-label="Close">×</span>
-      <h3>طريقة التثبيت</h3>
-      <div class="row">
-        <div class="card" style="flex:1">
-          <h4>Android (Chrome)</h4>
-          <ol><li>افتح الموقع في Chrome.</li><li>من القائمة ⋮ اختر <strong>Install app</strong>.</li><li>اضغط <strong>Install</strong>.</li></ol>
-        </div>
-        <div class="card" style="flex:1">
-          <h4>سطح المكتب (Chrome/Edge)</h4>
-          <ol><li>افتح الموقع.</li><li>زر <strong>Install</strong> من شريط العنوان (أو من قائمة المتصفح).</li><li>أكّد التثبيت.</li></ol>
-        </div>
-        <div class="card" style="flex:1">
-          <h4>iPhone / iPad (Safari)</h4>
-          <ol><li>افتح الموقع في <strong>Safari</strong>.</li><li>زر <strong>المشاركة</strong>.</li><li><strong>Add to Home Screen</strong> ثم <strong>Add</strong>.</li></ol>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- زر إضافة -->
-  <button id="fabAdd" class="fab" aria-label="Add">＋</button>
-
   <footer class="footer">
     <small>© 2025 — <span data-i18n="app_title">مصاريفي | My Expenses</span></small>
   </footer>
 
-  <!-- تسجيل SW احتياطي -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));

@@ -1,42 +1,13 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>الخصوصية • مصاريفي</title><link rel="stylesheet" href="./styles.css"></head>
-<body class="page" style="padding:16px">
-<h1>سياسة الخصوصية</h1>
-<p>هذا التطبيق يعمل محليًا—المصاريف تحفظ في متصفحك فقط ولا تُرسل لأي خادم.</p>
-<h2>التحليلات</h2>
-<p>نستخدم Google Analytics 4 (بشكل مجهول) لتحسين الأداء. لا نجمع معرفات شخصية.</p>
-<h2>الإعلانات</h2>
-<p>قد نعرض إعلانات من مزوّدين مثل Google AdSense أو بدائل. قد تستخدم ملفات تعريف الارتباط (cookies) وتقنيات مشابهة لقياس الأداء و/أو تخصيص الإعلانات وفق سياسات الموردين.</p>
-<ul>
-  <li>سياسة خصوصية جوجل للإعلانات: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Ads Policies</a></li>
-  <li>إعدادات الإعلانات لدى جوجل: <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Ads Settings</a></li>
-</ul>
-<h2>التحكم بالموافقة</h2>
-<p>يمكنك إدارة الموافقة على التخزين الإعلاني والتخصيص في أي وقت:</p>
-<div class="row" style="gap:8px">
-  <button class="btn" id="consentAccept">السماح بالإعلانات المخصصة والقياس</button>
-  <button class="btn danger" id="consentReject">الرفض (تعطيل التخصيص والتخزين الإعلاني)</button>
-</div>
-<p><a href="./index.html">العودة للتطبيق</a></p>
-<script>
-  // Bridge to analytics.js Consent Mode
-  function setConsent(mode){
-    try {
-      localStorage.setItem('me_consent', mode);
-      if(window.gtag){
-        const allow = mode==='yes';
-        gtag('consent', 'update', {
-          ad_user_data: allow?'granted':'denied',
-          ad_personalization: allow?'granted':'denied',
-          ad_storage: allow?'granted':'denied',
-          analytics_storage: allow?'granted':'denied'
-        });
-      }
-      alert('تم تحديث التفضيل.');
-    } catch(e){}
-  }
-  document.getElementById('consentAccept').onclick=()=> setConsent('yes');
-  document.getElementById('consentReject').onclick=()=> setConsent('no');
-</script>
+<body style="padding:16px">
+  <h1>سياسة الخصوصية المختصرة</h1>
+  <p>لا نرسل أي بيانات لخادم. يتم حفظ جميع المصروفات محليًا على جهازك (LocalStorage). قد تُستخدم خدمات خارجية مثل Google Analytics أو AdSense إذا قمت بإضافة المعرفات في <code>config.js</code>.</p>
+  <ul>
+    <li>التحليلات: تتبع مجهول للأحداث العامة (app_open, expense_add, settings_update ...).</li>
+    <li>الإعلانات: قد تستخدم ملفات تعريف الارتباط الخاصة بالمزوّد (تُدار من طرف Google/…)</li>
+  </ul>
+  <p><a href="./index.html">⬅ العودة للتطبيق</a></p>
 </body></html>

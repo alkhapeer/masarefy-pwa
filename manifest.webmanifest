@@ -9,13 +9,8 @@
   "theme_color": "#0ea5e9",
   "dir": "auto",
   "lang": "ar",
-  "description": "تطبيق PWA لإدارة المصاريف يعمل دون باك-إند، يدعم الأوفلاين والرسوم البيانية.",
   "orientation": "portrait-primary",
-  "categories": [
-    "finance",
-    "productivity",
-    "utilities"
-  ],
+  "description": "إدارة مصاريفك يوميًا وشهريًا مع نصائح ذكية — يعمل أوفلاين",
   "icons": [
     {
       "src": "assets/icons/icon-192.png",

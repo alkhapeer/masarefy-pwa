@@ -1,4 +1,3 @@
-// storage.js
 const KEYS={EXPENSES:'me_expenses', SETTINGS:'me_settings'};
 export function getSettings(){ try{return JSON.parse(localStorage.getItem(KEYS.SETTINGS)||'{}');}catch(e){return{};} }
 export function setSettings(patch){ const s={...getSettings(),...patch}; localStorage.setItem(KEYS.SETTINGS, JSON.stringify(s)); return s; }

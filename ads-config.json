@@ -1,0 +1,24 @@
+{
+  "provider": "adsense",
+  "adsense": {
+    "client": "",
+    "slot_top": "",
+    "slot_bottom": ""
+  },
+  "propeller": {
+    "script_src": "",
+    "data_zone": ""
+  },
+  "adsterra": {
+    "script_src": "",
+    "zone": ""
+  },
+  "banners": {
+    "top": {
+      "enabled": true
+    },
+    "bottom": {
+      "enabled": true
+    }
+  }
+}

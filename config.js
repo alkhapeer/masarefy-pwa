@@ -1,0 +1,18 @@
+// config.js
+window.APP_CONFIG = {
+  APP_NAME: "مصاريفي | My Expenses",
+  DEFAULT_LANGUAGE: "auto",
+  CURRENCY_SYMBOL: "ج.م",
+  GA4_MEASUREMENT_ID: "",
+  ADS_PROVIDER: "adsense",
+  ADSENSE_CLIENT_ID: "",
+  ADSENSE_SLOT_BANNER_TOP: "",
+  ADSENSE_SLOT_BANNER_BOTTOM: "",
+  PROPELLER_SCRIPT_SRC: "",
+  PROPELLER_DATA_ZONE: "",
+  ADSTERRA_SCRIPT_SRC: "",
+  ADSTERRA_ZONE: "",
+  SHOW_BANNERS_BY_DEFAULT: true,
+  SPLASH_SECONDS: 0, // disabled
+  CACHE_VERSION: "v1.0.4"
+};

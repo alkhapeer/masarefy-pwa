@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة إدارة الإعلانات • مصاريفي</title>
+<link rel="stylesheet" href="styles.css"></head>
+<body>
+<header class="topbar"><div class="brand">لوحة إدارة الإعلانات — مصاريفي</div><div class="actions"><a href="./index.html" class="btn small">← التطبيق</a></div></header>
+<main class="container">
+<section class="card"><h3>المزوّد</h3><div class="row"><select id="provider">
+<option value="adsense">AdSense</option><option value="propeller">PropellerAds</option><option value="adsterra">Adsterra</option><option value="none">None</option>
+</select></div></section>
+<section class="card"><h3>AdSense</h3><div class="row">
+<input id="adsense_client" placeholder="ca-pub-..." style="min-width:260px">
+<input id="adsense_slot_top" placeholder="Slot Top">
+<input id="adsense_slot_bottom" placeholder="Slot Bottom">
+</div></section>
+<section class="card"><h3>PropellerAds</h3><div class="row"><input id="propeller_script_src" placeholder="Script URL"><input id="propeller_zone" placeholder="data-zone"></div></section>
+<section class="card"><h3>Adsterra</h3><div class="row"><input id="adsterra_script_src" placeholder="Script URL"><input id="adsterra_zone" placeholder="Zone"></div></section>
+<section class="card"><h3>بنرات</h3><div class="row">
+<label class="switch"><input type="checkbox" id="banner_top_enabled" checked><span></span></label><span>أعلى</span>
+<label class="switch"><input type="checkbox" id="banner_bottom_enabled" checked><span></span></label><span>أسفل</span>
+</div></section>
+<section class="card"><h3>حفظ / مشاركة</h3><div class="row">
+<button id="saveLocal" class="btn">حفظ محليًا</button>
+<button id="exportJson" class="btn">تصدير ads-config.json</button>
+<label class="btn">استيراد JSON<input type="file" id="importFile" accept="application/json" style="display:none"></label>
+<p style="color:#94a3b8">لتطبيق التغييرات على الزوار: ارفع ملف <code>ads-config.json</code> إلى موقعك (ثم نشر Netlify).</p>
+</div></section>
+</main>
+<script>
+const LS_KEY='me_ads_config';
+async function loadCfg(){ try{const s=localStorage.getItem(LS_KEY); if(s) return JSON.parse(s);}catch(e){} try{const r=await fetch('./ads-config.json',{cache:'no-cache'}); if(r.ok) return await r.json();}catch(e){} return null; }
+function bind(cfg){ provider.value=cfg?.provider||'none'; adsense_client.value=cfg?.adsense?.client||''; adsense_slot_top.value=cfg?.adsense?.slot_top||''; adsense_slot_bottom.value=cfg?.adsense?.slot_bottom||''; propeller_script_src.value=cfg?.propeller?.script_src||''; propeller_zone.value=cfg?.propeller?.data_zone||''; adsterra_script_src.value=cfg?.adsterra?.script_src||''; adsterra_zone.value=cfg?.adsterra?.zone||''; banner_top_enabled.checked=cfg?.banners?.top?.enabled??true; banner_bottom_enabled.checked=cfg?.banners?.bottom?.enabled??true; }
+function collect(){ return { provider:provider.value, adsense:{client:adsense_client.value.trim(),slot_top:adsense_slot_top.value.trim(),slot_bottom:adsense_slot_bottom.value.trim()}, propeller:{script_src:propeller_script_src.value.trim(),data_zone:propeller_zone.value.trim()}, adsterra:{script_src:adsterra_script_src.value.trim(),zone:adsterra_zone.value.trim()}, banners:{ top:{enabled:banner_top_enabled.checked}, bottom:{enabled:banner_bottom_enabled.checked} } };}
+function download(filename, text){ const blob=new Blob([text],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; a.style.display='none'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},0);}
+saveLocal.onclick=()=>{ localStorage.setItem(LS_KEY, JSON.stringify(collect())); alert('تم الحفظ في متصفحك. لعموم الزوار: صدّر وارفع ads-config.json.'); };
+exportJson.onclick=()=> download('ads-config.json', JSON.stringify(collect(),null,2));
+importFile.onchange=async e=>{ const f=e.target.files[0]; if(!f) return; const txt=await f.text(); try{ bind(JSON.parse(txt)); }catch(_){ alert('ملف غير صالح'); } };
+loadCfg().then(cfg=> bind(cfg||{}));
+</script>
+</body></html>

@@ -1,80 +1,216 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title data-i18n="app_title">مصاريفي | My Expenses</title>
-<link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css"><meta name="theme-color" content="#0ea5e9">
-<script src="vendor/chart.min.js" defer></script><script src="config.js" defer></script><script src="i18n.js" defer></script><script src="analytics.js" defer></script><script src="ads.js" defer></script>
-<script src="utils.js" type="module"></script><script src="storage.js" type="module"></script><script src="charts.js" defer></script><script src="app.js" type="module"></script><script src="install.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title data-i18n="app_title">مصاريفي | My Expenses</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
+  <link rel="icon" type="image/png" href="./assets/icons/icon-192.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Vendor & App scripts (ترتيب التحميل مهم) -->
+  <script src="./vendor/chart.min.js" defer></script>
+  <script src="./config.js" defer></script>
+  <script src="./i18n.js" defer></script>
+  <script src="./analytics.js" defer></script>
+  <script src="./ads.js" defer></script>
+
+  <!-- ES Modules -->
+  <script type="module" src="./utils.js"></script>
+  <script type="module" src="./storage.js"></script>
+  <script defer src="./charts.js"></script>
+  <script type="module" src="./app.js"></script>
+  <script defer src="./install.js"></script>
 </head>
 <body>
-<header class="topbar"><div class="brand" data-i18n="app_title">مصاريفي | My Expenses</div>
-<div class="actions"><button id="langToggle" class="btn small">EN</button><a href="./privacy.html" class="btn small" data-i18n="privacy">الخصوصية</a><button id="installBtn" class="btn small" data-i18n="install_app">📲 ثبّت التطبيق</button><button id="howInstallBtn" class="btn small">طريقة التثبيت</button></div></header>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand" data-i18n="app_title">مصاريفي | My Expenses</div>
+    <div class="actions">
+      <button id="langToggle" class="btn small">EN</button>
+      <a href="./privacy.html" class="btn small" data-i18n="privacy">الخصوصية</a>
+      <a href="./admin.html" class="btn small">الإدارة</a>
+      <button id="installBtn" class="btn small" data-i18n="install_app" style="display:none">📲 ثبّت التطبيق</button>
+      <button id="howInstallBtn" class="btn small">طريقة التثبيت</button>
+    </div>
+  </header>
 
-<div id="ad-top" class="ad-box" aria-label="Top banner"></div>
+  <!-- Top banner ad -->
+  <div id="ad-top" class="ad-box" aria-label="Top banner"></div>
 
-<main class="container" id="mainApp">
-<section class="summary" data-section="home">
-  <div class="card"><div class="kpi"><div class="label" data-i18n="total_today">إجمالي اليوم</div><div id="totalToday" class="value">0</div></div></div>
-  <div class="card"><div class="kpi"><div class="label" data-i18n="total_month">إجمالي الشهر</div><div id="totalMonth" class="value">0</div></div></div>
-  <div class="card" id="budgetBox"><div class="kpi"><div class="label" data-i18n="remaining_budget">المتبقي من الميزانية</div><div id="remainingBudget" class="value">--</div></div></div>
-  <div class="card"><div class="kpi"><div class="label" data-i18n="highest_category">أعلى تصنيف إنفاق</div><div id="topCategory" class="value">-</div></div></div>
-</section>
+  <main class="container" id="mainApp">
+    <!-- KPIs -->
+    <section class="summary" data-section="home">
+      <div class="card">
+        <div class="kpi">
+          <div class="label" data-i18n="total_today">إجمالي اليوم</div>
+          <div id="totalToday" class="value">0</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kpi">
+          <div class="label" data-i18n="total_month">إجمالي الشهر</div>
+          <div id="totalMonth" class="value">0</div>
+        </div>
+      </div>
+      <div class="card" id="budgetBox">
+        <div class="kpi">
+          <div class="label" data-i18n="remaining_budget">المتبقي من الميزانية</div>
+          <div id="remainingBudget" class="value">--</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kpi">
+          <div class="label" data-i18n="highest_category">أعلى تصنيف إنفاق</div>
+          <div id="topCategory" class="value">-</div>
+        </div>
+      </div>
+    </section>
 
-<section class="controls" data-section="settings">
-  <div class="card"><h3 data-i18n="set_budget">إعدادات</h3>
-    <div class="row">
-      <input id="monthlyBudget" type="number" placeholder="3000" data-i18n-ph="budget_placeholder">
-      <input id="currencySymbol" style="max-width:120px" placeholder="$" data-i18n="currency_symbol" value="">
-      <select id="numberLocale" style="max-width:160px"><option value="en-US">en-US</option><option value="ar-EG">ar-EG</option><option value="fr-FR">fr-FR</option></select>
-      <button id="saveSettings" class="btn" data-i18n="save">حفظ</button>
+    <!-- Settings / Filters -->
+    <section class="controls" data-section="settings">
+      <div class="card">
+        <h3 data-i18n="set_budget">إعدادات</h3>
+        <div class="row">
+          <input id="monthlyBudget" type="number" placeholder="3000" data-i18n-ph="budget_placeholder" />
+          <input id="currencySymbol" style="max-width:120px" placeholder="$" data-i18n="currency_symbol" value="" />
+          <select id="numberLocale" style="max-width:160px">
+            <option value="en-US">en-US</option>
+            <option value="ar-EG">ar-EG</option>
+            <option value="fr-FR">fr-FR</option>
+          </select>
+          <button id="saveSettings" class="btn" data-i18n="save">حفظ</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 data-i18n="filters">بحث/تصفية</h3>
+        <div class="row">
+          <input id="filterCat" list="catList" data-i18n-ph="category_ph" placeholder="اكتب تصنيفًا (حر)" />
+          <input id="filterFrom" type="date" data-i18n-ph="filter_date_from" />
+          <input id="filterTo" type="date" data-i18n-ph="filter_date_to" />
+          <button id="applyFilters" class="btn" data-i18n="apply_filters">تطبيق</button>
+          <button id="resetFilters" class="btn" data-i18n="reset_filters">إعادة تعيين</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Add/Edit Modal -->
+    <div id="addModal" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <span class="close" aria-label="Close">×</span>
+        <h3 data-i18n="add_expense">إضافة مصروف</h3>
+        <form id="form">
+          <input type="hidden" id="id" />
+          <div class="row">
+            <input id="name" required data-i18n-ph="name" placeholder="الاسم/الوصف" />
+            <input id="amount" type="number" step="0.01" required data-i18n-ph="amount" placeholder="المبلغ" />
+            <input id="category" list="catList" required data-i18n-ph="category_ph" placeholder="اكتب تصنيفًا (حر)" />
+            <datalist id="catList"></datalist>
+            <input id="date" type="date" required data-i18n-ph="date" />
+            <input id="note" data-i18n-ph="note_optional" placeholder="ملاحظة (اختياري)" />
+            <button class="btn" data-i18n="save">حفظ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Expenses List -->
+    <section class="list card" data-section="home">
+      <h3 data-i18n="expenses">المصاريف</h3>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="name">الاسم/الوصف</th>
+              <th data-i18n="category_free">التصنيف</th>
+              <th data-i18n="date">التاريخ</th>
+              <th data-i18n="amount">المبلغ</th>
+              <th data-i18n="actions">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="expensesBody"></tbody>
+        </table>
+      </div>
+      <div class="row">
+        <button id="resetData" class="btn danger" data-i18n="reset_data">مسح البيانات</button>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="charts card" data-section="charts">
+      <h3 data-i18n="charts">الرسوم البيانية</h3>
+      <div class="row">
+        <canvas id="pieChart" height="200"></canvas>
+        <canvas id="barChart" height="200"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom banner ad -->
+  <div id="ad-bottom" class="ad-box" aria-label="Bottom banner"></div>
+
+  <!-- Tabs -->
+  <nav class="tabbar">
+    <button class="tab active" data-tab="home" aria-label="Home">🏠</button>
+    <button class="tab" data-tab="charts" aria-label="Charts">📊</button>
+    <button class="tab" data-tab="settings" aria-label="Settings">⚙️</button>
+  </nav>
+
+  <!-- How to install (unified) -->
+  <div id="installHowModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <span class="close" aria-label="Close">×</span>
+      <h3>طريقة التثبيت</h3>
+      <div class="row">
+        <div class="card" style="flex:1">
+          <h4>Android (Chrome)</h4>
+          <ol>
+            <li>افتح الموقع في Chrome.</li>
+            <li>من القائمة ⋮ اختر <strong>Install app</strong>.</li>
+            <li>اضغط <strong>Install</strong>.</li>
+          </ol>
+        </div>
+        <div class="card" style="flex:1">
+          <h4>سطح المكتب (Chrome/Edge)</h4>
+          <ol>
+            <li>افتح الموقع.</li>
+            <li>من شريط العنوان اضغط زر <strong>Install</strong> (أيقونة +).</li>
+            <li>أو من قائمة المتصفح اختر <strong>Install app</strong>.</li>
+          </ol>
+        </div>
+        <div class="card" style="flex:1">
+          <h4>iPhone / iPad (Safari)</h4>
+          <ol>
+            <li>افتح الموقع في <strong>Safari</strong>.</li>
+            <li>اضغط زر <strong>المشاركة</strong>.</li>
+            <li>اختر <strong>Add to Home Screen</strong> ثم <strong>Add</strong>.</li>
+          </ol>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="card"><h3 data-i18n="filters">بحث/تصفية</h3>
-    <div class="row">
-      <input id="filterCat" list="catList" data-i18n-ph="category_ph" placeholder="اكتب تصنيفًا (حر)">
-      <input id="filterFrom" type="date" data-i18n-ph="filter_date_from">
-      <input id="filterTo" type="date" data-i18n-ph="filter_date_to">
-      <button id="applyFilters" class="btn" data-i18n="apply_filters">تطبيق</button>
-      <button id="resetFilters" class="btn" data-i18n="reset_filters">إعادة تعيين</button>
-    </div>
-  </div>
-</section>
 
-<div id="addModal" class="modal"><div class="modal-content"><span class="close">&times;</span>
-<h3 data-i18n="add_expense">إضافة مصروف</h3>
-<form id="form"><input type="hidden" id="id"><div class="row">
-<input id="name" required data-i18n-ph="name" placeholder="الاسم/الوصف">
-<input id="amount" type="number" step="0.01" required data-i18n-ph="amount" placeholder="المبلغ">
-<input id="category" list="catList" required data-i18n-ph="category_ph" placeholder="اكتب تصنيفًا (حر)"><datalist id="catList"></datalist>
-<input id="date" type="date" required data-i18n-ph="date"><input id="note" data-i18n-ph="note_optional" placeholder="ملاحظة (اختياري)">
-<button class="btn" data-i18n="save">حفظ</button></div></form></div></div>
+  <!-- Floating Add Button -->
+  <button id="fabAdd" class="fab" aria-label="Add">＋</button>
 
-<section class="list card" data-section="home">
-  <h3 data-i18n="expenses">المصاريف</h3>
-  <div class="table"><table><thead><tr>
-    <th data-i18n="name">الاسم/الوصف</th><th data-i18n="category_free">التصنيف</th><th data-i18n="date">التاريخ</th><th data-i18n="amount">المبلغ</th><th data-i18n="actions">إجراءات</th>
-  </tr></thead><tbody id="expensesBody"></tbody></table></div>
-  <div class="row"><button id="resetData" class="btn danger" data-i18n="reset_data">مسح البيانات</button></div>
-</section>
+  <footer class="footer">
+    <small>© 2025 — <span data-i18n="app_title">مصاريفي | My Expenses</span></small>
+  </footer>
 
-<section class="charts card" data-section="charts"><h3 data-i18n="charts">الرسوم البيانية</h3>
-  <div class="row"><canvas id="pieChart" height="200"></canvas><canvas id="barChart" height="200"></canvas></div></section>
-</main>
-
-<div id="ad-bottom" class="ad-box" aria-label="Bottom banner"></div>
-
-<nav class="tabbar"><button class="tab active" data-tab="home">🏠</button><button class="tab" data-tab="charts">📊</button><button class="tab" data-tab="settings">⚙️</button></nav>
-
-<!-- How to install modal -->
-<div id="installHowModal" class="modal"><div class="modal-content"><span class="close">&times;</span>
-<h3>طريقة التثبيت</h3>
-<div class="row">
-  <div class="card" style="flex:1"><h4>Android (Chrome)</h4><ol><li>افتح في Chrome.</li><li>من القائمة ⋮ اختر <b>Install app</b>.</li><li>اضغط <b>Install</b>.</li></ol></div>
-  <div class="card" style="flex:1"><h4>سطح المكتب</h4><ol><li>افتح الموقع.</li><li>زر <b>Install</b> من شريط العنوان (أو من قائمة المتصفح).</li><li>أكّد التثبيت.</li></ol></div>
-  <div class="card" style="flex:1"><h4>iPhone / iPad (Safari)</h4><ol><li>افتح في <b>Safari</b>.</li><li>زر <b>المشاركة</b>.</li><li><b>Add to Home Screen</b> ثم <b>Add</b>.</li></ol></div>
-</div></div></div>
-
-<button id="fabAdd" class="fab" aria-label="Add">＋</button>
-<footer class="footer"><small>© 2025 — <span data-i18n="app_title">مصاريفي | My Expenses</span></small></footer>
-</body></html>
+  <!-- SW registration fallback (لو ناقص في app.js) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+    }
+  </script>
+</body>
+</html>
